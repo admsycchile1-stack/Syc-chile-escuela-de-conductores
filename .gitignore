@@ -1,0 +1,9 @@
+node_modules/
+.env
+escuela_de_conductores/*
+!escuela_de_conductores/.gitkeep
+uploads/*
+!uploads/comprobantes/.gitkeep
+!uploads/documentos/.gitkeep
+!uploads/egresos/.gitkeep
+frontend/build/

@@ -1,0 +1,15 @@
+FROM node:18-alpine
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+RUN mkdir -p /app/uploads/comprobantes /app/uploads/egresos /app/uploads/documentos /app/escuela_de_conductores/tmp /app/escuela_de_conductores/participantes
+
+EXPOSE 5000
+
+CMD ["npm", "run", "dev"]
