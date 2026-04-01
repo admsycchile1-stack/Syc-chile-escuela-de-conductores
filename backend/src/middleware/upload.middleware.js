@@ -30,17 +30,25 @@ const fileFilter = (req, file, cb) => {
     'image/jpeg',
     'image/png',
     'image/gif',
+    'image/webp',
     'application/pdf',
     'application/msword',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'application/vnd.ms-excel',
     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    'application/zip',
+    'application/x-zip-compressed',
+    'application/octet-stream', // A veces enviado por defecto
+    'text/csv',
+    'application/vnd.ms-outlook', // Archivos .msg de Outlook
+    'message/rfc822' // Archivos de correo estándar (.eml)
   ];
 
   if (allowedTypes.includes(file.mimetype)) {
     cb(null, true);
   } else {
-    cb(new Error('Tipo de archivo no permitido'), false);
+    console.error(`Archivo rechazado - Nombre: ${file.originalname}, Mimetype: ${file.mimetype}`);
+    cb(new Error(`Tipo de archivo no permitido: ${file.originalname} (${file.mimetype})`), false);
   }
 };
 
