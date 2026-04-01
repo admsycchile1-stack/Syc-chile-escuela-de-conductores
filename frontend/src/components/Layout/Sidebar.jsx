@@ -14,6 +14,7 @@ import {
   HiOutlineArrowSmRight,
   HiOutlineCash,
   HiOutlineTrendingDown,
+  HiOutlineTruck,
 } from 'react-icons/hi';
 
 const menuItems = [
@@ -22,6 +23,7 @@ const menuItems = [
   { path: '/instructores', label: 'Instructores', icon: HiOutlineUserGroup },
   { path: '/ingresos', label: 'Ingresos', icon: HiOutlineCash },
   { path: '/egresos', label: 'Egresos', icon: HiOutlineTrendingDown },
+  { path: '/combustible', label: 'Combustible', icon: HiOutlineTruck },
   { path: '/reportes', label: 'Reportes', icon: HiOutlineCurrencyDollar },
   { path: '/documentos', label: 'Documentos', icon: HiOutlineDocumentText },
   { path: '/estadisticas', label: 'Estadísticas', icon: HiOutlineChartBar },

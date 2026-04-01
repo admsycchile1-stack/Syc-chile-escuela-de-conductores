@@ -18,6 +18,7 @@ const categoriasRoutes = require('./routes/categorias.routes');
 const documentosRoutes = require('./routes/documentos.routes');
 const estadisticasRoutes = require('./routes/estadisticas.routes');
 const usuariosRoutes = require('./routes/usuarios.routes');
+const combustibleRoutes = require('./routes/combustible.routes');
 
 const authMiddleware = require('./middleware/auth.middleware');
 
@@ -69,6 +70,7 @@ app.use('/api/categorias', authMiddleware, categoriasRoutes);
 app.use('/api/documentos', authMiddleware, documentosRoutes);
 app.use('/api/estadisticas', authMiddleware, estadisticasRoutes);
 app.use('/api/usuarios', authMiddleware, usuariosRoutes);
+app.use('/api/combustible', authMiddleware, combustibleRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

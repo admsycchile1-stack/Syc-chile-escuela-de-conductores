@@ -9,6 +9,7 @@ import AlumnoDetail from './pages/Alumnos/AlumnoDetail';
 import InstructoresList from './pages/Instructores/InstructoresList';
 import Ingresos from './pages/Finanzas/Ingresos';
 import Egresos from './pages/Finanzas/Egresos';
+import CombustibleList from './pages/Combustible/CombustibleList';
 import Reportes from './pages/Finanzas/Reportes';
 import DocumentosList from './pages/Documentos/DocumentosList';
 import Estadisticas from './pages/Estadisticas/Estadisticas';
@@ -55,6 +56,7 @@ const App = () => {
             <Route path="instructores" element={<InstructoresList />} />
             <Route path="ingresos" element={<Ingresos />} />
             <Route path="egresos" element={<Egresos />} />
+            <Route path="combustible" element={<CombustibleList />} />
             <Route path="reportes" element={<Reportes />} />
             <Route path="documentos" element={<DocumentosList />} />
             <Route path="estadisticas" element={<Estadisticas />} />

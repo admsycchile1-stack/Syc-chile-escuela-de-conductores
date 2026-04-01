@@ -8,6 +8,7 @@ const Ingreso = require('./Ingreso');
 const CategoriaEgreso = require('./CategoriaEgreso');
 const Egreso = require('./Egreso');
 const Documento = require('./Documento');
+const Combustible = require('./Combustible');
 
 // Relaciones
 Instructor.hasMany(Alumno, { foreignKey: 'instructor_id', as: 'alumnos' });
@@ -36,4 +37,5 @@ module.exports = {
   CategoriaEgreso,
   Egreso,
   Documento,
+  Combustible,
 };

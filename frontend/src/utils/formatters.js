@@ -60,3 +60,33 @@ export const parseNumberInput = (value) => {
   if (!value) return '';
   return normalizeNumberString(value);
 };
+
+export const formatDecimalInput = (value) => {
+  if (value === null || value === undefined || value === '') return '';
+
+  const normalized = String(value)
+    .replace(',', '.')
+    .replace(/[^\d.]/g, '')
+    .replace(/(\..*)\./g, '$1');
+
+  if (!normalized) return '';
+
+  const [integerPart, decimalPart] = normalized.split('.');
+  const formattedInteger = integerPart ? new Intl.NumberFormat('es-CL').format(integerPart) : '0';
+
+  if (decimalPart === undefined) return formattedInteger;
+
+  return `${formattedInteger},${decimalPart.slice(0, 2)}`;
+};
+
+export const parseDecimalInput = (value) => {
+  if (value === null || value === undefined || value === '') return '';
+
+  const normalized = String(value)
+    .replace(/\./g, '')
+    .replace(',', '.')
+    .replace(/[^\d.]/g, '')
+    .replace(/(\..*)\./g, '$1');
+
+  return normalized;
+};
