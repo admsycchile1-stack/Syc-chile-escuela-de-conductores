@@ -9,7 +9,7 @@ import {
   HiOutlineArrowLeft, HiOutlineUser, HiOutlinePhone, HiOutlineLocationMarker,
   HiOutlineCalendar, HiOutlineCash, HiOutlineClipboardCheck, HiOutlinePlus,
   HiOutlineTrash, HiOutlineCheckCircle, HiOutlineXCircle, HiOutlineUpload,
-  HiOutlineDocumentText, HiOutlineIdentification,
+  HiOutlineDocumentText, HiOutlineIdentification, HiOutlineMail,
 } from 'react-icons/hi';
 
 const AlumnoDetail = () => {
@@ -182,6 +182,8 @@ const AlumnoDetail = () => {
           </h2>
           <div className="space-y-3">
             {[
+              { icon: HiOutlineMail, label: 'Correo', value: alumno.email },
+              { icon: HiOutlineUser, label: 'Edad', value: alumno.edad },
               { icon: HiOutlineLocationMarker, label: 'Dirección', value: alumno.direccion },
               { icon: HiOutlinePhone, label: 'Teléfono', value: alumno.telefono },
               { icon: HiOutlineCalendar, label: 'Fecha Inicio', value: formatDate(alumno.fecha_inicio) },

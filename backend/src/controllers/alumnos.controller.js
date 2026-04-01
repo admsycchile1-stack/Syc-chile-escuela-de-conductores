@@ -14,6 +14,7 @@ const getAll = async (req, res) => {
       where[Op.or] = [
         { nombre: { [Op.like]: `%${search}%` } },
         { rut: { [Op.like]: `%${search}%` } },
+        { email: { [Op.like]: `%${search}%` } },
       ];
     }
 

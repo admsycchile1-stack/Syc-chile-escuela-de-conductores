@@ -20,7 +20,7 @@ const AlumnosList = () => {
   const [editingAlumno, setEditingAlumno] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const [form, setForm] = useState({
-    nombre: '', rut: '', direccion: '', telefono: '', fecha_inicio: '',
+    nombre: '', rut: '', email: '', edad: '', direccion: '', telefono: '', fecha_inicio: '',
     fecha_termino: '', instructor_id: '', medio_pago: '', valor_curso: '', estado: 'en_curso',
   });
   const [error, setError] = useState('');
@@ -73,7 +73,7 @@ const AlumnosList = () => {
   const openCreate = () => {
     setEditingAlumno(null);
     setForm({
-      nombre: '', rut: '', direccion: '', telefono: '', fecha_inicio: '',
+      nombre: '', rut: '', email: '', edad: '', direccion: '', telefono: '', fecha_inicio: '',
       fecha_termino: '', instructor_id: '', medio_pago: '', valor_curso: '', estado: 'en_curso',
     });
     setError('');
@@ -85,6 +85,8 @@ const AlumnosList = () => {
     setForm({
       nombre: alumno.nombre || '',
       rut: alumno.rut ? formatRut(alumno.rut) : '',
+      email: alumno.email || '',
+      edad: alumno.edad ?? '',
       direccion: alumno.direccion || '',
       telefono: alumno.telefono || '',
       fecha_inicio: alumno.fecha_inicio || '',
@@ -149,7 +151,7 @@ const AlumnosList = () => {
         <div className="relative flex-1">
           <HiOutlineSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-dark-500" />
           <input
-            type="text" placeholder="Buscar por nombre o RUT..." value={search}
+            type="text" placeholder="Buscar por nombre, RUT o correo..." value={search}
             onChange={(e) => setSearch(e.target.value)} className="input-field pl-10"
           />
         </div>
@@ -182,6 +184,8 @@ const AlumnosList = () => {
                 <tr className="border-b border-dark-700/50">
                   <th className="table-header">Nombre</th>
                   <th className="table-header">RUT</th>
+                  <th className="table-header hidden xl:table-cell">Correo</th>
+                  <th className="table-header hidden 2xl:table-cell">Edad</th>
                   <th className="table-header hidden md:table-cell">Instructor</th>
                   <th className="table-header hidden lg:table-cell">Inicio</th>
                   <th className="table-header">Estado</th>
@@ -194,6 +198,12 @@ const AlumnosList = () => {
                   <tr key={alumno.id} className="hover:bg-dark-800/40 transition-colors">
                     <td className="table-cell font-medium text-white">{alumno.nombre}</td>
                     <td className="table-cell font-mono text-dark-300">{alumno.rut}</td>
+                    <td className="table-cell hidden xl:table-cell text-dark-300">
+                      {alumno.email || '-'}
+                    </td>
+                    <td className="table-cell hidden 2xl:table-cell text-dark-300">
+                      {alumno.edad ?? '-'}
+                    </td>
                     <td className="table-cell hidden md:table-cell text-dark-300">
                       {alumno.instructor?.nombre || '-'}
                     </td>
@@ -250,6 +260,16 @@ const AlumnosList = () => {
               <label className="label-field">RUT *</label>
               <input type="text" value={form.rut} onChange={(e) => setForm({ ...form, rut: formatRut(e.target.value) })}
                 className="input-field" placeholder="12.345.678-9" required />
+            </div>
+            <div>
+              <label className="label-field">Correo Electrónico</label>
+              <input type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
+                className="input-field" placeholder="alumno@correo.com" />
+            </div>
+            <div>
+              <label className="label-field">Edad</label>
+              <input type="number" value={form.edad} onChange={(e) => setForm({ ...form, edad: e.target.value })}
+                className="input-field" min="0" max="120" placeholder="18" />
             </div>
             <div>
               <label className="label-field">Dirección</label>

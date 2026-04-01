@@ -16,6 +16,19 @@ const Alumno = sequelize.define('Alumno', {
     allowNull: false,
     unique: true,
   },
+  email: {
+    type: DataTypes.STRING(150),
+    allowNull: true,
+    validate: { isEmail: true },
+  },
+  edad: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    validate: {
+      min: 0,
+      max: 120,
+    },
+  },
   direccion: {
     type: DataTypes.STRING(255),
     allowNull: true,
