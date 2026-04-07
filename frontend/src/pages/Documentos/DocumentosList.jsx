@@ -3,7 +3,6 @@ import api from '../../api/axios';
 import Modal from '../../components/common/Modal';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { formatDate } from '../../utils/formatters';
-import { buildApiUrl } from '../../utils/urls';
 import {
   HiOutlinePlus, HiOutlineTrash, HiOutlineDownload, HiOutlineDocumentText,
   HiOutlineUpload,
@@ -17,6 +16,7 @@ const DocumentosList = () => {
   const [form, setForm] = useState({ nombre: '', descripcion: '', tipo: '' });
   const [archivo, setArchivo] = useState(null);
   const [error, setError] = useState('');
+  const [downloadId, setDownloadId] = useState(null);
 
   const fetchDocumentos = async () => {
     try {
@@ -57,8 +57,32 @@ const DocumentosList = () => {
     } catch (err) { console.error(err); setDeleteConfirm(null); }
   };
 
-  const handleDownload = (id) => {
-    window.open(buildApiUrl(`/documentos/${id}/download`), '_blank');
+  const getDownloadFilename = (headers, fallbackName) => {
+    const contentDisposition = headers['content-disposition'] || '';
+    const match = contentDisposition.match(/filename="?([^"]+)"?/i);
+    return match?.[1] || fallbackName;
+  };
+
+  const handleDownload = async (doc) => {
+    try {
+      setDownloadId(doc.id);
+      const response = await api.get(`/documentos/${doc.id}/download`, {
+        responseType: 'blob',
+      });
+
+      const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = getDownloadFilename(response.headers, doc.nombre);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (err) {
+      alert(err.response?.data?.error || 'No se pudo descargar el documento');
+    } finally {
+      setDownloadId(null);
+    }
   };
 
   return (
@@ -102,9 +126,12 @@ const DocumentosList = () => {
                 </div>
               </div>
               <div className="flex gap-2 mt-4 pt-3 border-t border-dark-700/30">
-                <button onClick={() => handleDownload(doc.id)}
-                  className="flex-1 btn-secondary text-sm flex items-center justify-center gap-1.5 py-2">
-                  <HiOutlineDownload /> Descargar
+                <button
+                  onClick={() => handleDownload(doc)}
+                  disabled={downloadId === doc.id}
+                  className="flex-1 btn-secondary text-sm flex items-center justify-center gap-1.5 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <HiOutlineDownload /> {downloadId === doc.id ? 'Descargando...' : 'Descargar'}
                 </button>
                 <button onClick={() => setDeleteConfirm(doc)}
                   className="p-2 rounded-lg text-dark-400 hover:text-red-400 hover:bg-red-500/10 transition-all">
