@@ -10,6 +10,34 @@ import {
   HiOutlineEye, HiOutlineFilter,
 } from 'react-icons/hi';
 
+const PaymentReceiptBadge = ({ alumno }) => {
+  if (!alumno.total_pagos) {
+    return (
+      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold border bg-dark-700/60 text-dark-300 border-dark-600">
+        Sin pagos
+      </span>
+    );
+  }
+
+  if (alumno.tiene_comprobante_pendiente) {
+    const label = alumno.pagos_pendientes_comprobante > 1
+      ? `${alumno.pagos_pendientes_comprobante} pendientes`
+      : '1 pendiente';
+
+    return (
+      <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold border bg-amber-500/10 text-amber-400 border-amber-500/20">
+        {label}
+      </span>
+    );
+  }
+
+  return (
+    <span className="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold border bg-emerald-500/10 text-emerald-400 border-emerald-500/20">
+      Al día
+    </span>
+  );
+};
+
 const AlumnosList = () => {
   const [alumnos, setAlumnos] = useState([]);
   const [instructores, setInstructores] = useState([]);
@@ -187,6 +215,7 @@ const AlumnosList = () => {
                   <th className="table-header hidden xl:table-cell">Correo</th>
                   <th className="table-header hidden 2xl:table-cell">Edad</th>
                   <th className="table-header hidden md:table-cell">Instructor</th>
+                  <th className="table-header hidden xl:table-cell">Comprobante</th>
                   <th className="table-header hidden lg:table-cell">Inicio</th>
                   <th className="table-header">Estado</th>
                   <th className="table-header hidden lg:table-cell">Valor Curso</th>
@@ -206,6 +235,9 @@ const AlumnosList = () => {
                     </td>
                     <td className="table-cell hidden md:table-cell text-dark-300">
                       {alumno.instructor?.nombre || '-'}
+                    </td>
+                    <td className="table-cell hidden xl:table-cell">
+                      <PaymentReceiptBadge alumno={alumno} />
                     </td>
                     <td className="table-cell hidden lg:table-cell text-dark-300">
                       {formatDate(alumno.fecha_inicio)}

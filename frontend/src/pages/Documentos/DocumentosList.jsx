@@ -3,8 +3,10 @@ import api from '../../api/axios';
 import Modal from '../../components/common/Modal';
 import ConfirmDialog from '../../components/common/ConfirmDialog';
 import { formatDate } from '../../utils/formatters';
+import { buildFileUrl } from '../../utils/urls';
 import {
   HiOutlinePlus, HiOutlineTrash, HiOutlineDownload, HiOutlineDocumentText,
+  HiOutlineEye,
   HiOutlineUpload,
 } from 'react-icons/hi';
 
@@ -55,6 +57,15 @@ const DocumentosList = () => {
       setDeleteConfirm(null);
       fetchDocumentos();
     } catch (err) { console.error(err); setDeleteConfirm(null); }
+  };
+
+  const handlePreview = (doc) => {
+    if (!doc.archivo_url) {
+      alert('Este documento no tiene un archivo asociado');
+      return;
+    }
+
+    window.open(buildFileUrl(doc.archivo_url), '_blank', 'noopener,noreferrer');
   };
 
   const getDownloadFilename = (headers, fallbackName) => {
@@ -126,6 +137,12 @@ const DocumentosList = () => {
                 </div>
               </div>
               <div className="flex gap-2 mt-4 pt-3 border-t border-dark-700/30">
+                <button
+                  onClick={() => handlePreview(doc)}
+                  className="flex-1 btn-secondary text-sm flex items-center justify-center gap-1.5 py-2"
+                >
+                  <HiOutlineEye /> Ver
+                </button>
                 <button
                   onClick={() => handleDownload(doc)}
                   disabled={downloadId === doc.id}

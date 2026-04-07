@@ -20,11 +20,25 @@ const getAll = async (req, res) => {
 
     const alumnos = await Alumno.findAll({
       where,
-      include: [{ model: Instructor, as: 'instructor', attributes: ['id', 'nombre'] }],
+      include: [
+        { model: Instructor, as: 'instructor', attributes: ['id', 'nombre'] },
+        { model: Pago, as: 'pagos', attributes: ['id', 'comprobante_url'], required: false },
+      ],
       order: [['created_at', 'DESC']],
     });
 
-    res.json(alumnos);
+    res.json(alumnos.map((alumno) => {
+      const alumnoJson = alumno.toJSON();
+      const pagos = alumnoJson.pagos || [];
+      const pagosPendientesComprobante = pagos.filter((pago) => !pago.comprobante_url).length;
+
+      return {
+        ...alumnoJson,
+        total_pagos: pagos.length,
+        pagos_pendientes_comprobante: pagosPendientesComprobante,
+        tiene_comprobante_pendiente: pagosPendientesComprobante > 0,
+      };
+    }));
   } catch (error) {
     console.error('Error al obtener alumnos:', error);
     res.status(500).json({ error: 'Error al obtener alumnos' });
