@@ -3,6 +3,15 @@ const { Op } = require('sequelize');
 const fs = require('fs');
 const path = require('path');
 
+const deleteStoredFile = (fileUrl) => {
+  if (!fileUrl) return;
+
+  const filePath = path.join(__dirname, '../..', fileUrl);
+  if (fs.existsSync(filePath)) {
+    fs.unlinkSync(filePath);
+  }
+};
+
 const getAll = async (req, res) => {
   try {
     const { estado, instructor_id, search } = req.query;
@@ -197,8 +206,10 @@ const uploadDocumentoAlumno = async (req, res) => {
     const fileUrl = `/escuela_de_conductores/participantes/${encodeURIComponent(folderName)}/${req.file.filename}`;
     
     if (tipoDocumento === 'cedula') {
+      deleteStoredFile(alumno.cedula_url);
       await alumno.update({ cedula_url: fileUrl });
     } else {
+      deleteStoredFile(alumno.contrato_url);
       await alumno.update({ contrato_url: fileUrl });
     }
 
@@ -209,4 +220,31 @@ const uploadDocumentoAlumno = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getById, create, update, remove, uploadDocumentoAlumno };
+const deleteDocumentoAlumno = async (req, res) => {
+  try {
+    const alumno = await Alumno.findByPk(req.params.id);
+    if (!alumno) {
+      return res.status(404).json({ error: 'Alumno no encontrado' });
+    }
+
+    const { tipoDocumento } = req.params;
+    if (!['cedula', 'contrato'].includes(tipoDocumento)) {
+      return res.status(400).json({ error: 'Tipo de documento no válido' });
+    }
+
+    const field = tipoDocumento === 'cedula' ? 'cedula_url' : 'contrato_url';
+    if (!alumno[field]) {
+      return res.status(404).json({ error: 'El documento no existe' });
+    }
+
+    deleteStoredFile(alumno[field]);
+    await alumno.update({ [field]: null });
+
+    res.json({ message: 'Documento eliminado correctamente' });
+  } catch (error) {
+    console.error('Error al eliminar documento:', error);
+    res.status(500).json({ error: 'Error al eliminar documento' });
+  }
+};
+
+module.exports = { getAll, getById, create, update, remove, uploadDocumentoAlumno, deleteDocumentoAlumno };

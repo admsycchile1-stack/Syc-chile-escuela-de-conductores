@@ -133,6 +133,18 @@ const AlumnoDetail = () => {
     }
   };
 
+  const handleDocumentoDelete = async (tipo) => {
+    const label = tipo === 'cedula' ? 'la cédula' : 'el contrato';
+    if (!window.confirm(`¿Eliminar ${label} de este alumno?`)) return;
+
+    try {
+      await api.delete(`/alumnos/${id}/documentos/${tipo}`);
+      fetchAlumno();
+    } catch (err) {
+      alert(err.response?.data?.error || 'Error al eliminar documento');
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center py-12">
@@ -214,10 +226,19 @@ const AlumnoDetail = () => {
                 </span>
               </div>
               {alumno.cedula_url ? (
-                <a href={buildFileUrl(alumno.cedula_url)} target="_blank" rel="noopener noreferrer"
-                  className="text-primary-400 hover:text-primary-300 text-sm flex items-center gap-1 mb-2">
-                  Ver Documento Actual
-                </a>
+                <div className="flex items-center gap-2 mb-2">
+                  <a href={buildFileUrl(alumno.cedula_url)} target="_blank" rel="noopener noreferrer"
+                    className="text-primary-400 hover:text-primary-300 text-sm flex items-center gap-1">
+                    Ver Documento Actual
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => handleDocumentoDelete('cedula')}
+                    className="text-red-400 hover:text-red-300 text-xs"
+                  >
+                    Eliminar
+                  </button>
+                </div>
               ) : (
                 <span className="text-dark-500 text-sm block mb-2">No subida</span>
               )}
@@ -235,10 +256,19 @@ const AlumnoDetail = () => {
                 </span>
               </div>
               {alumno.contrato_url ? (
-                <a href={buildFileUrl(alumno.contrato_url)} target="_blank" rel="noopener noreferrer"
-                  className="text-primary-400 hover:text-primary-300 text-sm flex items-center gap-1 mb-2">
-                  Ver Documento Actual
-                </a>
+                <div className="flex items-center gap-2 mb-2">
+                  <a href={buildFileUrl(alumno.contrato_url)} target="_blank" rel="noopener noreferrer"
+                    className="text-primary-400 hover:text-primary-300 text-sm flex items-center gap-1">
+                    Ver Documento Actual
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => handleDocumentoDelete('contrato')}
+                    className="text-red-400 hover:text-red-300 text-xs"
+                  >
+                    Eliminar
+                  </button>
+                </div>
               ) : (
                 <span className="text-dark-500 text-sm block mb-2">No subido</span>
               )}
